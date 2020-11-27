@@ -1,8 +1,13 @@
 #include "Server.h"
 
-Server::Server(DataTransfer &data){
-    dataTransfer = &data;
+Server::Server(MotorData &motorData, AcquirePhoto &acquirePhoto){
+    this->motorData = &motorData;
+    this->acquirePhoto = &acquirePhoto;
+}
 
+Server::~Server(){};
+
+void Server::startServer(){
     addressServer.sin_family = AF_INET;
     addressServer.sin_port = htons(PORT);
     inet_pton(AF_INET, "0.0.0.0", &addressServer.sin_addr);
@@ -12,30 +17,31 @@ Server::Server(DataTransfer &data){
     listen(socketServer, SOMAXCONN);
 
     clientSize = sizeof(addressClient);
-
     socketClient = accept(socketServer, (sockaddr*)&addressClient, &clientSize);
-
     close(socketServer);
-}
 
-Server::~Server(){};
-
-void Server::startTransferring(){
     while(true){
-        int numberOfBytes = recv(socketClient, buffer, sizeof(buffer), 0);
-        std::cout<<"0";
+        int numberOfBytes = recv(socketClient, inputBuffer, sizeof(inputBuffer), 0);
         if (numberOfBytes <= 0){
-            dataTransfer->setMotorLeft(0);
-            dataTransfer->setMotorRight(0);
+            std::cout<<"failed";
+            motorData->setMotorLeft(0);
+            motorData->setMotorRight(0);
             socketServer = socket(AF_INET, SOCK_STREAM, 0);
             bind(socketServer, (sockaddr*)&addressServer, sizeof(addressServer));
             listen(socketServer, SOMAXCONN);
             socketClient = accept(socketServer, (sockaddr*)&addressClient, &clientSize);
             close(socketServer);
         }else{
-            dataTransfer->setMotorLeft(buffer[0] - 100);
-            dataTransfer->setMotorRight(buffer[1] - 100);
-            send(socketClient, buffer, numberOfBytes + 1, 0);
+            motorData->setMotorLeft(inputBuffer[0] - 100);
+            motorData->setMotorRight(inputBuffer[1] - 100);
+            std::cout<<motorData->getMotorLeft()<<motorData->getMotorRight()<<std::endl;
+            while(true){
+                if (acquirePhoto->isReadyToSend()){
+                    send(socketClient, &acquirePhoto->sizeBuffer[0], 4, 0);
+                    send(socketClient, &acquirePhoto->photoBuffer[0], acquirePhoto->photoBuffer.size(), 0);
+                    break;
+                }
+            }
         }
     }
 }

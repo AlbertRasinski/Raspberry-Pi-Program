@@ -1,7 +1,8 @@
 #ifndef SERVER_H
 #define SERVER_H
 
-#include "DataTransfer.h"
+#include "MotorData.h"
+#include "AcquirePhoto.h"
 
 #include <netinet/in.h>
 #include <arpa/inet.h>
@@ -13,10 +14,10 @@
 
 class Server{
     public:
-        Server(DataTransfer &data);
+        Server(MotorData &motorData, AcquirePhoto &acquirePhoto);
         ~Server();
 
-        void startTransferring();
+        void startServer();
 
     private:
         const int PORT = 4831;
@@ -25,12 +26,12 @@ class Server{
         int socketServer;
         sockaddr addressClient;
         int socketClient;
-
         socklen_t clientSize;
 
-        char buffer[2];
+        char inputBuffer[2];
 
-        DataTransfer *dataTransfer;
+        MotorData *motorData;
+        AcquirePhoto *acquirePhoto;
 };
 
 #endif
