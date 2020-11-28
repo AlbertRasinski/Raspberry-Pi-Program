@@ -11,6 +11,7 @@ class AcquirePhoto:public ThreadTask{
         virtual ~AcquirePhoto();
 
         std::vector<uchar> photoBuffer;
+        std::vector<uchar> photoBuffer1;
         std::vector<uchar> sizeBuffer;
 
         virtual void doOnThread();
@@ -18,7 +19,7 @@ class AcquirePhoto:public ThreadTask{
         bool isReadyToSend();
 
     private:
-        const int FPS = 30;
+        const int FPS = 10;
         const int DELAY_IN_MILISEC = 1000000/FPS;
         const int PHOTO_WIDTH = 960;
         const int PHOTO_HEIGHT = 540;
@@ -28,6 +29,7 @@ class AcquirePhoto:public ThreadTask{
         cv::VideoCapture camera;
         cv::Mat frame;
         bool readyToSend;
+        bool copying;
 };
 
 #endif

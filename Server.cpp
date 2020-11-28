@@ -34,11 +34,15 @@ void Server::startServer(){
         }else{
             motorData->setMotorLeft(inputBuffer[0] - 100);
             motorData->setMotorRight(inputBuffer[1] - 100);
-            std::cout<<motorData->getMotorLeft()<<motorData->getMotorRight()<<std::endl;
+            //std::cout<<motorData->getMotorLeft()<<motorData->getMotorRight()<<std::endl;
+            /*acquirePhoto->doOnThread();
+            send(socketClient, &acquirePhoto->sizeBuffer[0], 4, 0);
+            send(socketClient, &acquirePhoto->photoBuffer[0], acquirePhoto->photoBuffer.size(), 0);
+            usleep(acquirePhoto->DELAY_IN_MILISEC);*/
             while(true){
                 if (acquirePhoto->isReadyToSend()){
                     send(socketClient, &acquirePhoto->sizeBuffer[0], 4, 0);
-                    send(socketClient, &acquirePhoto->photoBuffer[0], acquirePhoto->photoBuffer.size(), 0);
+                    send(socketClient, &acquirePhoto->photoBuffer1[0], acquirePhoto->photoBuffer1.size(), 0);
                     break;
                 }
             }
