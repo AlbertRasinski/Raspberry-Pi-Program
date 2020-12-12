@@ -1,8 +1,9 @@
 #ifndef SERVER_H
 #define SERVER_H
 
-#include "MotorData.h"
 #include "AcquirePhoto.h"
+#include "MotorControl.h"
+#include "MotorData.h"
 
 #include <netinet/in.h>
 #include <arpa/inet.h>
@@ -30,6 +31,7 @@ class Server{
 
         char inputBuffer[2];
 
+        MotorControl motorControl;
         MotorData *motorData;
         AcquirePhoto *acquirePhoto;
 };

@@ -26,9 +26,6 @@ void AcquirePhoto::doOnThread(){
             readyToSend = true;
             usleep(DELAY_IN_MILISEC);
         }
-
-        /*sizeBuffer[2] = floor(photoBuffer.size() / 256);
-        sizeBuffer[3] = photoBuffer.size() - sizeBuffer[2] * 256;*/
     }
 }
 

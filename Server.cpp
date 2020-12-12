@@ -1,6 +1,6 @@
 #include "Server.h"
 
-Server::Server(MotorData &motorData, AcquirePhoto &acquirePhoto){
+Server::Server(MotorData &motorData, AcquirePhoto &acquirePhoto):motorControl(motorData){
     this->motorData = &motorData;
     this->acquirePhoto = &acquirePhoto;
 }
@@ -19,7 +19,7 @@ void Server::startServer(){
     clientSize = sizeof(addressClient);
     socketClient = accept(socketServer, (sockaddr*)&addressClient, &clientSize);
     close(socketServer);
-
+    std::cout<<"1";
     while(true){
         int numberOfBytes = recv(socketClient, inputBuffer, sizeof(inputBuffer), 0);
         if (numberOfBytes <= 0){
@@ -34,6 +34,7 @@ void Server::startServer(){
         }else{
             motorData->setMotorLeft(inputBuffer[0] - 100);
             motorData->setMotorRight(inputBuffer[1] - 100);
+            motorControl.motorDriverControl();
             //std::cout<<motorData->getMotorLeft()<<motorData->getMotorRight()<<std::endl;
             /*acquirePhoto->doOnThread();
             send(socketClient, &acquirePhoto->sizeBuffer[0], 4, 0);

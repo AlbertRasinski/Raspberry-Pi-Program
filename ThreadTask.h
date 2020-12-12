@@ -8,7 +8,7 @@ class ThreadTask{
     public:
         ThreadTask();
         virtual ~ThreadTask();
-pthread_t thread;
+        pthread_t thread;
         bool startThread();
         void joinThread();
 

@@ -7,31 +7,27 @@ using namespace std;
 
 int main(){
     MotorData motorData;
-    MotorControl motorControl(motorData);
-    AcquirePhoto acquirePhoto;
-    Server server(motorData, acquirePhoto);
+    /*AcquirePhoto acquirePhoto;
+    Server server(motorData, acquirePhoto);*/
 
-    ThreadTask *t1;
+    /*ThreadTask *t1;
     t1 = &acquirePhoto;
-    t1->startThread();
+    t1->startThread();*/
 
-    server.startServer();
+    /*ThreadTask *t2;
+    t2 = &motorData;
+    t2->startThread();
 
-    t1->joinThread();
+    //server.startServer();
 
-    /*while(1){
-        std::cin >> x;
-        motorData.setMotorRight(x);
+    //t1->joinThread();
+    //t2->joinThread();*/
+    int x;
+    MotorControl motorControl(motorData);
+    while(1){
         std::cin >> x;
         motorData.setMotorLeft(x);
         motorControl.motorDriverControl();
-    }*/
-    /*MotorData motorData;
-    Server server(motorData);
-    MotorControl motorControll(motorData);
-    ThreadTask *motorThreadPointer = &motorControll;
-    motorThreadPointer->startThread();
-
-    server.startTransferring();
-    motorThreadPointer->joinThread();*/
+        motorData.doOnThread();
+    }
 }
